@@ -1,5 +1,7 @@
 package com.muza.server.dto;
 
+import java.util.List;
+
 public class QuestionDTO {
     private String title;
     private String body;

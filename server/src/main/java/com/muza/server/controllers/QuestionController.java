@@ -1,54 +1,53 @@
 package com.muza.server.controllers;
 
+import com.muza.server.dto.QuestionDTO;
+import com.muza.server.dto.QuestionResponse;
+import com.muza.server.services.QuestionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.muza.server.entities.Question;
-import com.muza.server.services.QuestionService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/questions")
+@RequiredArgsConstructor
 public class QuestionController {
+
     private final QuestionService questionService;
 
-    public QuestionController(QuestionService questionService) {
-        this.questionService = questionService;
-    }
-
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Question question) {
-        return ResponseEntity.ok(questionService.createQuestion(question));
+    public ResponseEntity<QuestionResponse> createQuestion(
+            @RequestBody QuestionDTO questionDTO) {
+        return ResponseEntity.ok(
+                questionService.createQuestion(questionDTO)
+        );
     }
 
     @GetMapping
-    public ResponseEntity<Page<Question>> getAllQuestions(
+    public ResponseEntity<Page<QuestionResponse>> getAllQuestions(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String tag) {
         return ResponseEntity.ok(
-                questionService.getAllQuestions(PageRequest.of(page, size))
+                questionService.getAllQuestions(PageRequest.of(page, size), tag)
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable Long id) {
-        return ResponseEntity.ok(questionService.getQuestionById(id));
+    public ResponseEntity<QuestionResponse> getQuestionById(@PathVariable Long id) {
+        return questionService.getQuestionById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Question> updateQuestion(
+    public ResponseEntity<QuestionResponse> updateQuestion(
             @PathVariable Long id,
-            @RequestBody Question question) {
-        return ResponseEntity.ok(questionService.updateQuestion(id, question));
+            @RequestBody QuestionDTO questionDTO) {
+        return ResponseEntity.ok(
+                questionService.updateQuestion(id, questionDTO)
+        );
     }
 
     @DeleteMapping("/{id}")
