@@ -29,8 +29,6 @@ public class Question {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
-    @Column(nullable = false)
-    private Integer score = 0;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -53,15 +51,19 @@ public class Question {
     )
     private Set<Tag> tags = new HashSet<>();
 
-    public void addTag(Tag tag) {
-        tags.add(tag);
-        tag.getQuestions().add(this);
+    @Column(name = "votes_sum")
+    private Integer votesSum = 0;
+
+    // Геттер и сеттер для votesSum с защитой от null
+    public Integer getVotesSum() {
+        return votesSum != null ? votesSum : 0;
     }
 
-    public void addAnswer(Answer answer) {
-        answers.add(answer);
-        answer.setQuestion(this);
+    public void setVotesSum(Integer votesSum) {
+        this.votesSum = votesSum;
     }
+
+    // Остальные геттеры и сеттеры
 
     public Long getId() {
         return id;
@@ -85,14 +87,6 @@ public class Question {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -126,4 +120,15 @@ public class Question {
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+        tag.getQuestions().add(this);
+    }
+
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        answer.setQuestion(this);
+    }
 }
+

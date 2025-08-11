@@ -20,7 +20,7 @@ public class QuestionResponse {
         this.id = question.getId();
         this.title = question.getTitle();
         this.body = question.getBody();
-        this.score = question.getScore();
+        this.score = question.getVotesSum();
         this.createdAt = question.getCreatedAt();
         this.user = new UserResponse(question.getUser());
         this.answers = question.getAnswers().stream()

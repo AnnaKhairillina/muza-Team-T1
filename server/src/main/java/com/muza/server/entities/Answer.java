@@ -44,6 +44,17 @@ public class Answer {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "questions", "answers", "password"})
     private User user;
 
+    @Column(name = "votes_sum")
+    private Integer votesSum = 0;
+
+    public int getVotesSum() {
+        return votesSum;
+    }
+
+    public void setVotesSum(int votesSum) {
+        this.votesSum = votesSum;
+    }
+
     public Long getId() {
         return id;
     }

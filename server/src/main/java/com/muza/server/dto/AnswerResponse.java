@@ -16,7 +16,7 @@ public class AnswerResponse {
     public AnswerResponse(Answer answer) {
         this.id = answer.getId();
         this.body = answer.getBody();
-        this.score = answer.getScore();
+        this.score = answer.getVotesSum();
         this.accepted = answer.isAccepted();
         this.createdAt = answer.getCreatedAt();
         this.userId = answer.getUser().getId();
