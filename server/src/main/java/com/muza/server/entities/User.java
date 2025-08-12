@@ -1,114 +1,61 @@
 package com.muza.server.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Builder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(unique = true, nullable = false, length = 50)
-    private String username;
-
-    @Column(unique = true, nullable = false, length = 100)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    @Builder.Default
-    private String role = "USER";
+    private Integer reputation;
 
     @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "creationdate", nullable = false)
+    private LocalDateTime creationDate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @Builder.Default
-    private List<Question> questions = new ArrayList<>();
+    @Column(name = "displayname", length = 40, nullable = false)
+    private String displayName;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    @Builder.Default
-    private List<Answer> answers = new ArrayList<>();
+    @Column(name = "lastaccessdate")
+    private LocalDateTime lastAccessDate;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "websiteurl", length = 200)
+    private String websiteUrl;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(length = 100)
+    private String location;
 
-    public String getUsername() {
-        return username;
-    }
+    @Column(columnDefinition = "TEXT")
+    private String aboutme;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    private Integer views;
+    private Integer upvotes;
+    private Integer downvotes;
 
-    public String getEmail() {
-        return email;
-    }
+    @Column(name = "profileimageurl", length = 200)
+    private String profileImageUrl;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    @Column(name = "emailhash", length = 32)
+    private String emailHash;
 
-    public String getPassword() {
-        return password;
-    }
+    @Column(name = "accountid")
+    private Integer accountId;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @OneToMany(mappedBy = "ownerUser", cascade = CascadeType.ALL)
+    private List<Post> posts;
 
-    public String getRole() {
-        return role;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments;
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Vote> votes;
 }

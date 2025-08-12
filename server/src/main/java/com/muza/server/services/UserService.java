@@ -19,16 +19,15 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmailHash(user.getEmailHash())) {
             throw new RuntimeException("Email already exists");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser = userRepository.save(user);
         return new UserResponse(savedUser);
     }
 
-    public Optional<UserResponse> getUserById(Long id) {
+    public Optional<UserResponse> getUserById(Integer id) {
         return userRepository.findById(id)
                 .map(UserResponse::new);
     }
@@ -40,25 +39,16 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(Integer id) {
         userRepository.deleteById(id);
     }
 
-    public Optional<UserResponse> updateUser(Long id, User userData) {
-        Optional<User> userOpt = userRepository.findById(id);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            user.setUsername(userData.getUsername());
-            user.setEmail(userData.getEmail());
-
-            // Хэшируем пароль если он не пустой и не null
-            if (userData.getPassword() != null && !userData.getPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(userData.getPassword()));
-            }
+    public Optional<UserResponse> updateUser(Integer id, User userData) {
+        return userRepository.findById(id).map(user -> {
+            user.setDisplayName(userData.getDisplayName());
 
             userRepository.save(user);
-            return Optional.of(new UserResponse(user));
-        }
-        return Optional.empty();
+            return new UserResponse(user);
+        });
     }
 }

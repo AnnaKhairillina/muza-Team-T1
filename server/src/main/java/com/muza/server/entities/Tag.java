@@ -1,62 +1,30 @@
 package com.muza.server.entities;
 
 import jakarta.persistence.*;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
+import lombok.Data;
 
 @Entity
 @Table(name = "tags")
+@Data
 public class Tag {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(unique = true, nullable = false, length = 50)
-    private String name;
+    @Column(name = "tagname", unique = true, nullable = false, length = 35)
+    private String tagName;
 
-    @ManyToMany(mappedBy = "tags")
-    @JsonIgnore
-    private Set<Question> questions = new HashSet<>();
+    private Integer count;
 
-    public Tag() {
-    }
+    @Column(name = "excerptpostid")
+    private Integer excerptPostId;
 
-    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
-    public Tag(String name) {
-        this.name = name;
-    }
+    @Column(name = "wikipostid")
+    private Integer wikiPostId;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "ismoderatoronly")
+    private Boolean isModeratorOnly;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Question> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(Set<Question> questions) {
-        this.questions = questions;
-    }
+    @Column(name = "isrequired")
+    private Boolean isRequired;
 }
-

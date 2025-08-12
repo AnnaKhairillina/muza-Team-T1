@@ -18,31 +18,24 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<Comment> createComment(@RequestBody CommentDTO commentDTO) {
-        Comment comment = commentService.createComment(commentDTO);
-        return ResponseEntity.ok(comment);
+        return ResponseEntity.ok(commentService.createComment(commentDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody CommentDTO commentDTO) {
-        Comment updatedComment = commentService.updateComment(id, commentDTO);
-        return ResponseEntity.ok(updatedComment);
+    public ResponseEntity<Comment> updateComment(
+            @PathVariable Integer id,
+            @RequestBody CommentDTO commentDTO) {
+        return ResponseEntity.ok(commentService.updateComment(id, commentDTO));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer id) {
         commentService.deleteComment(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/question/{questionId}")
-    public ResponseEntity<List<Comment>> getCommentsByQuestion(@PathVariable Long questionId) {
-        List<Comment> comments = commentService.getCommentsByQuestion(questionId);
-        return ResponseEntity.ok(comments);
-    }
-
-    @GetMapping("/answer/{answerId}")
-    public ResponseEntity<List<Comment>> getCommentsByAnswer(@PathVariable Long answerId) {
-        List<Comment> comments = commentService.getCommentsByAnswer(answerId);
-        return ResponseEntity.ok(comments);
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<List<Comment>> getCommentsByPost(@PathVariable Integer postId) {
+        return ResponseEntity.ok(commentService.getCommentsByPost(postId));
     }
 }

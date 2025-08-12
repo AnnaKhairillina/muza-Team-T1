@@ -13,15 +13,11 @@ public class VoteController {
 
     private final VoteService voteService;
 
-    @PostMapping("/question/{questionId}")
-    public ResponseEntity<Void> voteQuestion(@PathVariable Long questionId, @RequestBody VoteDTO voteDTO) {
-        voteService.voteForQuestion(questionId, voteDTO);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/answer/{answerId}")
-    public ResponseEntity<Void> voteAnswer(@PathVariable Long answerId, @RequestBody VoteDTO voteDTO) {
-        voteService.voteForAnswer(answerId, voteDTO);
+    @PostMapping("/post/{postId}")
+    public ResponseEntity<Void> voteForPost(
+            @PathVariable Integer postId,
+            @RequestBody VoteDTO voteDTO) {
+        voteService.voteForPost(postId, voteDTO);
         return ResponseEntity.ok().build();
     }
 }

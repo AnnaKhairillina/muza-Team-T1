@@ -2,11 +2,14 @@ package com.muza.server.repositories;
 
 import com.muza.server.entities.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByQuestionId(Long questionId);
+@Repository
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
-    List<Comment> findByAnswerId(Long answerId);
+    List<Comment> findByPostId(Integer postId);
+
+    List<Comment> findByUserId(Integer userId);
 }
